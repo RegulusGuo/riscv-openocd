@@ -146,6 +146,7 @@ static enum {
 static const virt2phys_info_t sv32 = {
 	.name = "Sv32",
 	.va_bits = 32,
+	.pa_bits = 34,
 	.level = 2,
 	.pte_shift = 2,
 	.vpn_shift = {12, 22},
@@ -159,6 +160,7 @@ static const virt2phys_info_t sv32 = {
 static const virt2phys_info_t sv32x4 = {
 	.name = "Sv32x4",
 	.va_bits = 34,
+	.pa_bits = 34,
 	.level = 2,
 	.pte_shift = 2,
 	.vpn_shift = {12, 22},
@@ -172,6 +174,7 @@ static const virt2phys_info_t sv32x4 = {
 static const virt2phys_info_t sv39 = {
 	.name = "Sv39",
 	.va_bits = 39,
+	.pa_bits = 56,
 	.level = 3,
 	.pte_shift = 3,
 	.vpn_shift = {12, 21, 30},
@@ -185,6 +188,7 @@ static const virt2phys_info_t sv39 = {
 static const virt2phys_info_t sv39x4 = {
 	.name = "Sv39x4",
 	.va_bits = 41,
+	.pa_bits = 56,
 	.level = 3,
 	.pte_shift = 3,
 	.vpn_shift = {12, 21, 30},
@@ -198,6 +202,7 @@ static const virt2phys_info_t sv39x4 = {
 static const virt2phys_info_t sv48 = {
 	.name = "Sv48",
 	.va_bits = 48,
+	.pa_bits = 56,
 	.level = 4,
 	.pte_shift = 3,
 	.vpn_shift = {12, 21, 30, 39},
@@ -211,6 +216,7 @@ static const virt2phys_info_t sv48 = {
 static const virt2phys_info_t sv48x4 = {
 	.name = "Sv48x4",
 	.va_bits = 50,
+	.pa_bits = 56,
 	.level = 4,
 	.pte_shift = 3,
 	.vpn_shift = {12, 21, 30, 39},
@@ -224,6 +230,7 @@ static const virt2phys_info_t sv48x4 = {
 static const virt2phys_info_t sv57 = {
 	.name = "Sv57",
 	.va_bits = 57,
+	.pa_bits = 56,
 	.level = 5,
 	.pte_shift = 3,
 	.vpn_shift = {12, 21, 30, 39, 48},
@@ -237,6 +244,7 @@ static const virt2phys_info_t sv57 = {
 static const virt2phys_info_t sv57x4 = {
 	.name = "Sv57x4",
 	.va_bits = 59,
+	.pa_bits = 56,
 	.level = 5,
 	.pte_shift = 3,
 	.vpn_shift = {12, 21, 30, 39, 48},
@@ -2273,6 +2281,8 @@ static int riscv_address_translate(struct target *target,
 		*physical |= (ppn << info->pa_ppn_shift[i]);
 		i++;
 	}
+	*physical &= (((target_addr_t)1 << info->pa_bits) - 1);
+
 	LOG_TARGET_DEBUG(target, "mode=%s; 0x%" TARGET_PRIxADDR " -> 0x%" TARGET_PRIxADDR,
 			 info->name, virtual, *physical);
 	return ERROR_OK;

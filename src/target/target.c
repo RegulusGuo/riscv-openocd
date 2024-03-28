@@ -1812,7 +1812,7 @@ int target_call_event_callbacks(struct target *target, enum target_event event)
 		target_call_event_callbacks(target, TARGET_EVENT_GDB_HALT);
 	}
 
-	LOG_DEBUG("target event %i (%s) for core %s", event,
+	LOG_INFO("target event %i (%s) for core %s", event,
 			target_event_name(event),
 			target_name(target));
 
